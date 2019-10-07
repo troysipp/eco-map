@@ -1,0 +1,40 @@
+{
+  "countries": {
+    "us": {
+      "name": "United States of America",
+      "questions": {
+        "elbow-room": {
+          "year": {
+            "1995": {
+              "value": 28
+            },
+            "2018": {
+              "value": 36
+            },
+            "2025 (projected)": {
+              "value": 35
+            }
+          }
+        }
+      }
+    },
+    "ca": {
+      "name": "Canada",
+      "questions": {
+        "elbow-room": {
+          "year": {
+            "1995": {
+              "value": 3
+            },
+            "2018": {
+              "value": 4
+            },
+            "2025 (projected)": {
+              "value": 4
+            }
+          }
+        }
+      }
+    }
+  }
+}
