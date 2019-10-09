@@ -2,6 +2,7 @@
   "countries": {
     "us": {
       "name": "United States of America",
+      "code": "us",
       "questions": {
         "elbow-room": {
           "year": {
@@ -20,6 +21,7 @@
     },
     "ca": {
       "name": "Canada",
+      "code": "ca",
       "questions": {
         "elbow-room": {
           "year": {

@@ -1,3 +1,12 @@
 #mapid {
   height: 500px;
 }
+
+/* not sure why this isn't having an effect */
+.title-question {
+  margin-top: 5% !important;
+}
+
+.dropdown-list {
+  margin-bottom: 2.5%;
+}

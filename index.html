@@ -15,16 +15,19 @@
 
 <body>
 
-  <nav class="navbar">
-    <div class="container">
-      <h3 class="nav-item">
-        hello
-      </h3>
-    </div>
-  </nav>
-
   <div class="container">
     <div class="row">
+      <h1 class="col align-self-center display-1 title-question">
+        <p class="text-center" id="title-question-text">Where do you care about?</p>
+      </h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <h3 col align-self-center>
+      <p class="text-center text-muted" id="selection-advice">(select from the map or dropdown list)</p>
+    </h3>
+    <!-- <div class="row">
       <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -32,11 +35,11 @@
         </button>
         <div class="dropdown-menu" id="questions-list" aria-labelledby="dropdownMenuButton">
         </div>
-      </div>
-      <div class="dropdown">
+      </div> -->
+      <div class="dropdown text-center dropdown-list">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          Where are you worrying about?
+          Places
         </button>
         <div class="dropdown-menu" id="countries-list" aria-labelledby="dropdownMenuButton">
         </div>
@@ -64,6 +67,8 @@
     var countryData;
     var questionData;
 
+    var selectedCountryCode;
+
     var mymap = L.map('mapid').setView([20, -0], 2);
     loadJSON(function (response) {
       worldGrid = JSON.parse(response);
@@ -78,29 +83,17 @@
         ddElem = document.createElement('li');
         ddElemLink = document.createElement('a');
         ddElemText = document.createTextNode(place.name)
+        ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false );
         ddElemLink.append(ddElemText);
         ddElem.append(ddElemLink);
         countriesList.append(ddElem)
       }
-    }, './countries.json')
-
-    loadJSON(function (response) {
-      questionData = JSON.parse(response);
-      questionsList = document.querySelector('#questions-list');
-      for (i in questionData['questions']) {
-        topic = questionData['questions'][i];
-        ddElem = document.createElement('li');
-        ddElemLink = document.createElement('a');
-        ddElemText = document.createTextNode(topic.question)
-        ddElemLink.append(ddElemText);
-        ddElem.append(ddElemLink);
-        questionsList.append(ddElem)
-      }
-    }, './questions.json')
+    }, './places.json')
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
+      minZoom: 2,
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoidHJveXNpcHAiLCJhIjoiY2sxOW0zb2FiMDA3NTNkbXEydXRnanV4bCJ9.pr9t9J_hWcOs1DsHoHHO_A'
     }).addTo(mymap);
@@ -110,25 +103,22 @@
     }
 
     function onMapClick(e) {
-      console.log('lat long', e.latlng);
       grid.getCode(e.latlng.lat, e.latlng.lng, function (err, code) {
-        var msg;
         if (err) {
-          msg = err;
+          console.log(err);
         } else {
-          msg = "You clicked on: " + code;
+          selectedCountryCode = code;
+          mapCodeToData(selectedCountryCode);
         }
-        console.log('msg', msg);
       });
     }
 
     mymap.on('click', onMapClick);
 
     function loadJSON(callback, dataLocation) {
-      console.log('dataloc', dataLocation)
       var xobj = new XMLHttpRequest();
       xobj.overrideMimeType("application/json");
-      xobj.open('GET', dataLocation, true); // Replace 'my_data' with the path to your file
+      xobj.open('GET', dataLocation, true);
       xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
@@ -137,6 +127,49 @@
       };
       xobj.send(null);
     }
+
+    function mapFullNameToCode(countryName) {
+      for (i in countryData['countries']) {
+        if (countryName === countryData['countries'][i].name) {
+          selectedCountryCode = i;
+          mapCodeToData(selectedCountryCode);
+        }
+      }
+    }
+
+    function mapCodeToData(countryCode) {
+      switchToWorries(countryData['countries'][countryCode]);
+    }
+
+    function switchToWorries(country) {
+      console.log('switching to worries', country, selectedCountryCode);
+      if (selectedCountryCode !== undefined) {
+      // change title question
+        document.querySelector('#title-question-text').textContent = 'What do you care about?'
+      // change selection advice
+        document.querySelector('#selection-advice').textContent = '(select from the dropdown list)'
+      // load question data
+        loadJSON(function (response) {
+
+        }, './issues.json')
+      // change dropdown to questions
+      // disable clicking on the map
+      }
+    }
+
+        // loadJSON(function (response) {
+    //   questionData = JSON.parse(response);
+    //   questionsList = document.querySelector('#questions-list');
+    //   for (i in questionData['questions']) {
+    //     topic = questionData['questions'][i];
+    //     ddElem = document.createElement('li');
+    //     ddElemLink = document.createElement('a');
+    //     ddElemText = document.createTextNode(topic.question)
+    //     ddElemLink.append(ddElemText);
+    //     ddElem.append(ddElemLink);
+    //     questionsList.append(ddElem)
+    //   }
+    // }, './questions.json')
   </script>
 </body>
 
