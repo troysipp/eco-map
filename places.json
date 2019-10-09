@@ -3,7 +3,7 @@
     "us": {
       "name": "United States of America",
       "code": "us",
-      "questions": {
+      "issues": {
         "elbow-room": {
           "year": {
             "1995": {
@@ -22,7 +22,7 @@
     "ca": {
       "name": "Canada",
       "code": "ca",
-      "questions": {
+      "issues": {
         "elbow-room": {
           "year": {
             "1995": {

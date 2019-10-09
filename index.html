@@ -15,39 +15,39 @@
 
 <body>
 
-  <div class="container">
-    <div class="row">
+  <div class="container" id="title-container">
+    <div class="row" id="title-row">
       <h1 class="col align-self-center display-1 title-question">
         <p class="text-center" id="title-question-text">Where do you care about?</p>
       </h1>
     </div>
   </div>
 
-  <div class="container">
+  <div class="container" id="questions-container">
     <h3 col align-self-center>
       <p class="text-center text-muted" id="selection-advice">(select from the map or dropdown list)</p>
     </h3>
-    <!-- <div class="row">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          What are you worrying about?
-        </button>
-        <div class="dropdown-menu" id="questions-list" aria-labelledby="dropdownMenuButton">
-        </div>
-      </div> -->
-      <div class="dropdown text-center dropdown-list">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          Places
-        </button>
-        <div class="dropdown-menu" id="countries-list" aria-labelledby="dropdownMenuButton">
-        </div>
+    <div class="dropdown text-center dropdown-list" id="countries-dd">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Places
+      </button>
+      <div class="dropdown-menu" id="countries-list" aria-labelledby="dropdownMenuButton">
+      </div>
+    </div>
+    <!-- <div class="row"> -->
+    <div class="dropdown text-center dropdown-list hide this-will-not-be-read" id="issues-dd">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Issues
+      </button>
+      <div class="dropdown-menu" id="issues-list" aria-labelledby="dropdownMenuButton">
       </div>
     </div>
   </div>
+  </div>
 
-  <div id="mapid" style="height:500px"></div>
+  <div id="mapid" style="height:500px;position:absolute;bottom:0%;left:0%;width: 100%;"></div>
 
   <script type="text/javascript" src="./vendor/leaflet.js"></script>
   <script type="text/javascript" src="./vendor/codegrid-js/src/codegrid.js"></script>
@@ -65,9 +65,10 @@
     var worldGrid;
     var grid;
     var countryData;
-    var questionData;
+    var issueData;
 
-    var selectedCountryCode;
+    var selectedCountryCode = undefined;
+    var selectedIssueCode = undefined;
 
     var mymap = L.map('mapid').setView([20, -0], 2);
     loadJSON(function (response) {
@@ -81,9 +82,10 @@
       for (i in countryData['countries']) {
         place = countryData['countries'][i];
         ddElem = document.createElement('li');
+        ddElem.classList = 'selectable';
         ddElemLink = document.createElement('a');
         ddElemText = document.createTextNode(place.name)
-        ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false );
+        ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false);
         ddElemLink.append(ddElemText);
         ddElem.append(ddElemLink);
         countriesList.append(ddElem)
@@ -142,34 +144,83 @@
     }
 
     function switchToWorries(country) {
-      console.log('switching to worries', country, selectedCountryCode);
+      // console.log('switching to worries', country, selectedCountryCode);
       if (selectedCountryCode !== undefined) {
-      // change title question
+        // change title question
         document.querySelector('#title-question-text').textContent = 'What do you care about?'
-      // change selection advice
+        // change selection advice
         document.querySelector('#selection-advice').textContent = '(select from the dropdown list)'
-      // load question data
+        // load issue data
         loadJSON(function (response) {
-
+          issueData = JSON.parse(response);
+          countriesDD = document.querySelector('#countries-dd');
+          countriesDD.className += ' hide this-will-not-be-read';
+          document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
+          // console.log(countryData['countries'][selectedCountryCode]['issues']);
+          for (i in countryData['countries'][selectedCountryCode]['issues']) {
+            console.log(issueData['issues'][i]);
+            issueDatum = issueData['issues'][i];
+            issuesList = document.querySelector('#issues-list');
+            ddElem = document.createElement('li');
+            ddElemLink = document.createElement('a');
+            ddElemText = document.createTextNode(issueDatum.issue);
+            ddElemLink.addEventListener('click', e => setSelectedIssue(e.target.innerHTML), false);
+            ddElemLink.append(ddElemText);
+            ddElem.append(ddElemLink);
+            issuesList.append(ddElem);
+          }
         }, './issues.json')
-      // change dropdown to questions
-      // disable clicking on the map
+        // disable clicking on the map
       }
     }
 
-        // loadJSON(function (response) {
-    //   questionData = JSON.parse(response);
-    //   questionsList = document.querySelector('#questions-list');
-    //   for (i in questionData['questions']) {
-    //     topic = questionData['questions'][i];
-    //     ddElem = document.createElement('li');
-    //     ddElemLink = document.createElement('a');
-    //     ddElemText = document.createTextNode(topic.question)
-    //     ddElemLink.append(ddElemText);
-    //     ddElem.append(ddElemLink);
-    //     questionsList.append(ddElem)
-    //   }
-    // }, './questions.json')
+    function setSelectedIssue(issueText) {
+      // console.log('EVENT', issueText);
+      for (i in issueData['issues']) {
+        if (issueText === issueData['issues'][i].issue) {
+          selectedIssueCode = i;
+          generateResult()
+        }
+      }
+    }
+
+    function generateResult() {
+      console.log('starting result', selectedIssueCode, selectedCountryCode)
+      if (selectedCountryCode !== undefined && selectedIssueCode !== undefined) {
+        document.querySelector('#title-row').className += ' hide this-will-not-be-read';
+        document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
+        resultDiv = document.createElement('div');
+        resultDiv.id = 'results'
+        resultText = document.createTextNode(`${countryData['countries'][selectedCountryCode].name} ${issueData['issues'][selectedIssueCode].answer} ${countryData['countries'][selectedCountryCode]['issues'][selectedIssueCode]['year']['2018'].value} ${issueData['issues'][selectedIssueCode].units}`);
+        resultText.className = 'text-center align-self-center display-4';
+        restartLink = document.createElement('button');
+        restartLinkText = document.createTextNode('Select new options');
+        restartLink.addEventListener('click', e => restart(e), false);
+        restartLink.append(restartLinkText);
+        titleContainer = document.querySelector('#title-container');
+        resultDiv.append(resultText);
+        resultDiv.append(restartLink);
+        titleContainer.append(resultDiv);
+      }
+    }
+
+    function restart(event) {
+      console.log('restarting');
+      selectedCountryCode = undefined;
+      selectedIssueCode = undefined;
+      // reset title question
+      document.querySelector('#title-question-text').textContent = 'Where do you care about?'
+      // reset selection advice
+      document.querySelector('#selection-advice').textContent = '(select from the map or dropdown list)'
+      // reset selection options
+
+      document.querySelector('#title-row').className = 'title row';
+      document.querySelector('#questions-container').className = 'container';
+      document.querySelector('#results').className = 'hide this-will-not-be-read';
+      console.log('title', document.querySelector('#results').className)
+      // console.log(document.querySelector('#questions-container').className)
+    }
+
   </script>
 </body>
 

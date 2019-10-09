@@ -1,7 +1,7 @@
 {
-  "questions": {
+  "issues": {
     "elbow-room": {
-      "question": "'Elbow room,' cried Daniel Boone",
+      "issue": "'Elbow room,' cried Daniel Boone",
       "answer": "has",
       "units": "people/km^2"
     }
