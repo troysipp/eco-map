@@ -27,12 +27,12 @@
     <h3 col align-self-center>
       <p class="text-center text-muted" id="selection-advice">(select from the map or dropdown list)</p>
     </h3>
-    <div class="dropdown text-center dropdown-list" id="countries-dd">
+    <div class="dropdown text-center dropdown-list" id="places-dd">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         Places
       </button>
-      <div class="dropdown-menu" id="countries-list" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu" id="places-list" aria-labelledby="dropdownMenuButton">
       </div>
     </div>
     <!-- <div class="row"> -->
@@ -64,10 +64,10 @@
   <script>
     var worldGrid;
     var grid;
-    var countryData;
+    var placeData;
     var issueData;
 
-    var selectedCountryCode = undefined;
+    var selectedPlaceCode = undefined;
     var selectedIssueCode = undefined;
 
     var mymap = L.map('mapid').setView([20, -0], 2);
@@ -77,10 +77,10 @@
     }, './vendor/codegrid-js/tiles/worldgrid.json');
 
     loadJSON(function (response) {
-      countryData = JSON.parse(response);
-      countriesList = document.querySelector('#countries-list');
-      for (i in countryData['countries']) {
-        place = countryData['countries'][i];
+      placeData = JSON.parse(response);
+      placesList = document.querySelector('#places-list');
+      for (i in placeData['places']) {
+        place = placeData['places'][i];
         ddElem = document.createElement('li');
         ddElem.classList = 'selectable';
         ddElemLink = document.createElement('a');
@@ -89,7 +89,7 @@
         ddElemLink.append(ddElemText);
         ddElem.append(ddElemLink);
         // console.log('countriesList', countriesList)
-        countriesList.append(ddElem)
+        placesList.append(ddElem)
       }
     }, './places.json')
 
@@ -110,8 +110,8 @@
         if (err) {
           console.log(err);
         } else {
-          selectedCountryCode = code;
-          mapCodeToData(selectedCountryCode);
+          selectedPlaceCode = code;
+          mapCodeToData(selectedPlaceCode);
         }
       });
     }
@@ -131,22 +131,22 @@
       xobj.send(null);
     }
 
-    function mapFullNameToCode(countryName) {
-      for (i in countryData['countries']) {
-        if (countryName === countryData['countries'][i].name) {
+    function mapFullNameToCode(placeName) {
+      for (i in placeData['places']) {
+        if (placeName === placeData['places'][i].name) {
           selectedCountryCode = i;
-          mapCodeToData(selectedCountryCode);
+          mapCodeToData(selectedPlacesCode);
         }
       }
     }
 
-    function mapCodeToData(countryCode) {
-      switchToWorries(countryData['countries'][countryCode]);
+    function mapCodeToData(placeCode) {
+      switchToWorries(placeData['places'][placeCode]);
     }
 
-    function switchToWorries(country) {
+    function switchToWorries(place) {
       // console.log('switching to worries', country, selectedCountryCode);
-      if (selectedCountryCode !== undefined) {
+      if (selectedPlaceCode !== undefined) {
         // change title question
         document.querySelector('#title-question-text').textContent = 'What do you care about?'
         // change selection advice
@@ -154,11 +154,11 @@
         // load issue data
         loadJSON(function (response) {
           issueData = JSON.parse(response);
-          countriesDD = document.querySelector('#countries-dd');
-          countriesDD.className += ' hide this-will-not-be-read';
+          placesDD = document.querySelector('#places-dd');
+          placesDD.className += ' hide this-will-not-be-read';
           document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
           // console.log(countryData['countries'][selectedCountryCode]['issues']);
-          for (i in countryData['countries'][selectedCountryCode]['issues']) {
+          for (i in placeData['places'][selectedPlaceCode]['issues']) {
             // console.log(issueData['issues'][i]);
             issueDatum = issueData['issues'][i];
             issuesList = document.querySelector('#issues-list');
@@ -188,12 +188,12 @@
 
     function generateResult() {
       // console.log('starting result', selectedIssueCode, selectedCountryCode)
-      if (selectedCountryCode !== undefined && selectedIssueCode !== undefined) {
+      if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
         document.querySelector('#title-row').className += ' hide this-will-not-be-read';
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
         resultDiv = document.createElement('div');
         resultDiv.id = 'results'
-        resultText = document.createTextNode(`${countryData['countries'][selectedCountryCode].name} ${issueData['issues'][selectedIssueCode].answer} ${countryData['countries'][selectedCountryCode]['issues'][selectedIssueCode]['year']['2018'].value} ${issueData['issues'][selectedIssueCode].units}`);
+        resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode].name} ${issueData['issues'][selectedIssueCode].answer} ${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['year']['2018'].value} ${issueData['issues'][selectedIssueCode].units}`);
         resultText.className = 'text-center align-self-center display-4';
         restartLink = document.createElement('button');
         restartLinkText = document.createTextNode('Select new options');
@@ -208,7 +208,7 @@
 
     function restart(event) {
       console.log('restarting');
-      selectedCountryCode = undefined;
+      selectedPlaceCode = undefined;
       selectedIssueCode = undefined;
       // reset title question
       document.querySelector('#title-question-text').textContent = 'Where do you care about?'
@@ -222,7 +222,7 @@
       // console.log(document.querySelector('#questions-container').className)
 
       document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
-      document.querySelector('#countries-dd').className = 'dropdown text-center dropdown-list';
+      document.querySelector('#places-dd').className = 'dropdown text-center dropdown-list';
     }
 
   </script>
