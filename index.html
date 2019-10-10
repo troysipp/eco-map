@@ -47,7 +47,7 @@
   </div>
   </div>
 
-  <div id="mapid" style="height:500px;position:absolute;bottom:0%;left:0%;width: 100%;"></div>
+  <div id="mapid" style="height:400px;position:absolute;bottom:0%;left:0%;width: 100%;"></div>
 
   <script type="text/javascript" src="./vendor/leaflet.js"></script>
   <script type="text/javascript" src="./vendor/codegrid-js/src/codegrid.js"></script>
@@ -88,6 +88,7 @@
         ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false);
         ddElemLink.append(ddElemText);
         ddElem.append(ddElemLink);
+        // console.log('countriesList', countriesList)
         countriesList.append(ddElem)
       }
     }, './places.json')
@@ -158,7 +159,7 @@
           document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
           // console.log(countryData['countries'][selectedCountryCode]['issues']);
           for (i in countryData['countries'][selectedCountryCode]['issues']) {
-            console.log(issueData['issues'][i]);
+            // console.log(issueData['issues'][i]);
             issueDatum = issueData['issues'][i];
             issuesList = document.querySelector('#issues-list');
             ddElem = document.createElement('li');
@@ -167,6 +168,7 @@
             ddElemLink.addEventListener('click', e => setSelectedIssue(e.target.innerHTML), false);
             ddElemLink.append(ddElemText);
             ddElem.append(ddElemLink);
+            // console.log('issuesList', issuesList);
             issuesList.append(ddElem);
           }
         }, './issues.json')
@@ -185,7 +187,7 @@
     }
 
     function generateResult() {
-      console.log('starting result', selectedIssueCode, selectedCountryCode)
+      // console.log('starting result', selectedIssueCode, selectedCountryCode)
       if (selectedCountryCode !== undefined && selectedIssueCode !== undefined) {
         document.querySelector('#title-row').className += ' hide this-will-not-be-read';
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
@@ -213,12 +215,14 @@
       // reset selection advice
       document.querySelector('#selection-advice').textContent = '(select from the map or dropdown list)'
       // reset selection options
-
       document.querySelector('#title-row').className = 'title row';
       document.querySelector('#questions-container').className = 'container';
       document.querySelector('#results').className = 'hide this-will-not-be-read';
-      console.log('title', document.querySelector('#results').className)
+      // console.log('title', document.querySelector('#results').className)
       // console.log(document.querySelector('#questions-container').className)
+
+      document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
+      document.querySelector('#countries-dd').className = 'dropdown text-center dropdown-list';
     }
 
   </script>
