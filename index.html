@@ -17,7 +17,7 @@
 
   <div class="container" id="title-container">
     <div class="row" id="title-row">
-      <h1 class="col align-self-center display-1 title-question">
+      <h1 class="col align-self-center display-1 upper-space">
         <p class="text-center" id="title-question-text">Where do you care about?</p>
       </h1>
     </div>
@@ -47,9 +47,9 @@
   </div>
 
   <div class="container text-center hide this-will-not-be-read" id="results">
-    <div class="row">
-        <h3 class="text-center" id="result-text"></h3>
-        <button class="btn btn-primary" type="button" id="refreshButton" onclick="restart()">
+    <div class="">
+        <h3 class="text-center display-5 upper-space" id="result-text"></h3>
+        <button class="btn btn-secondary" type="button" id="refreshButton" onclick="restart()">
           Select new options
         </button>
     </div>
@@ -205,7 +205,7 @@
         // resultDiv = document.createElement('div');
         // resultDiv.id = 'results'
         resultTextContainer = document.querySelector('#result-text');
-        resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode].name} ${issueData['issues'][selectedIssueCode].answer} ${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['year']['2018'].value} ${issueData['issues'][selectedIssueCode].units}`);
+        resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['value']}`);
         resultText.className = 'text-center align-self-center display-4';
         // restartLink = document.createElement('button');
         // restartLinkText = document.createTextNode('Select new options');
@@ -231,8 +231,6 @@
       document.querySelector('#title-row').className = 'title row';
       document.querySelector('#questions-container').className = 'container';
       document.querySelector('#results').className = 'hide this-will-not-be-read';
-      // console.log('title', document.querySelector('#results').className)
-      // console.log(document.querySelector('#questions-container').className)
 
       document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
       document.querySelector('#places-dd').className = 'dropdown text-center dropdown-list';
@@ -244,10 +242,6 @@
 
       // remove adding of results
       document.querySelector('#result-text').removeChild(document.querySelector('#result-text').childNodes[0]);
-      // document.querySelector('#results').removeChild(document.querySelector('#results').childNodes[0]);
-      // for (i in document.querySelector('#results').childNodes) {
-      //   document.querySelector('#results').removeChild(document.querySelector('#results').childNodes[i]);
-      // }
 
     }
 

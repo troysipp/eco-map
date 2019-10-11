@@ -5,17 +5,7 @@
       "code": "us",
       "issues": {
         "elbow-room": {
-          "year": {
-            "1995": {
-              "value": 28
-            },
-            "2018": {
-              "value": 36
-            },
-            "2025 (projected)": {
-              "value": 35
-            }
-          }
+          "value": "In 1995, the United States of America had 28 people/km^2.  In 2018, that number was 36 people/km^2 and is projected to be 35 people/km^2 in 2025."
         }
       }
     },
@@ -24,17 +14,7 @@
       "code": "ca",
       "issues": {
         "elbow-room": {
-          "year": {
-            "1995": {
-              "value": 3
-            },
-            "2018": {
-              "value": 4
-            },
-            "2025 (projected)": {
-              "value": 4
-            }
-          }
+          "value": "In 1995, Canada had 3 people/km^2.  In 2018, that number was 4 people/km^2 and is projected to be 4 people/km^2 in 2025."
         }
       }
     }
