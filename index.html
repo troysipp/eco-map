@@ -45,6 +45,14 @@
       </div>
     </div>
   </div>
+
+  <div class="container text-center hide this-will-not-be-read" id="results">
+    <div class="row">
+        <h3 class="text-center" id="result-text"></h3>
+        <button class="btn btn-primary" type="button" id="refreshButton" onclick="restart()">
+          Select new options
+        </button>
+    </div>
   </div>
 
   <div id="mapid" style="height:400px;position:absolute;bottom:0%;left:0%;width: 100%;"></div>
@@ -106,6 +114,7 @@
     }
 
     function onMapClick(e) {
+      // add functionality to disable click here
       grid.getCode(e.latlng.lat, e.latlng.lng, function (err, code) {
         if (err) {
           console.log(err);
@@ -134,8 +143,8 @@
     function mapFullNameToCode(placeName) {
       for (i in placeData['places']) {
         if (placeName === placeData['places'][i].name) {
-          selectedCountryCode = i;
-          mapCodeToData(selectedPlacesCode);
+          selectedPlaceCode = i;
+          mapCodeToData(selectedPlaceCode);
         }
       }
     }
@@ -187,27 +196,31 @@
     }
 
     function generateResult() {
+      console.log('before result', document.querySelector('#results').childNodes)
+
       // console.log('starting result', selectedIssueCode, selectedCountryCode)
       if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
         document.querySelector('#title-row').className += ' hide this-will-not-be-read';
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
-        resultDiv = document.createElement('div');
-        resultDiv.id = 'results'
+        // resultDiv = document.createElement('div');
+        // resultDiv.id = 'results'
+        resultTextContainer = document.querySelector('#result-text');
         resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode].name} ${issueData['issues'][selectedIssueCode].answer} ${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['year']['2018'].value} ${issueData['issues'][selectedIssueCode].units}`);
         resultText.className = 'text-center align-self-center display-4';
-        restartLink = document.createElement('button');
-        restartLinkText = document.createTextNode('Select new options');
-        restartLink.addEventListener('click', e => restart(e), false);
-        restartLink.append(restartLinkText);
+        // restartLink = document.createElement('button');
+        // restartLinkText = document.createTextNode('Select new options');
+        // restartLink.addEventListener('click', e => restart(e), false);
+        // restartLink.append(restartLinkText);
         titleContainer = document.querySelector('#title-container');
-        resultDiv.append(resultText);
-        resultDiv.append(restartLink);
-        titleContainer.append(resultDiv);
+        resultTextContainer.append(resultText);
+        // resultDiv.append(restartLink);
+        // titleContainer.append(resultDiv);
+        document.querySelector('#results').className = 'container text-center';
       }
     }
 
-    function restart(event) {
-      console.log('restarting');
+    function restart() {
+
       selectedPlaceCode = undefined;
       selectedIssueCode = undefined;
       // reset title question
@@ -223,6 +236,23 @@
 
       document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
       document.querySelector('#places-dd').className = 'dropdown text-center dropdown-list';
+
+      // remove adding of issues
+      document.querySelector('#issues-list').removeChild(document.querySelector('#issues-list').lastChild)
+
+      console.log('after result', document.querySelector('#results').childNodes)
+
+      // remove adding of results
+      document.querySelector('#result-text').removeChild(document.querySelector('#result-text').childNodes[0]);
+      // document.querySelector('#results').removeChild(document.querySelector('#results').childNodes[0]);
+      // for (i in document.querySelector('#results').childNodes) {
+      //   document.querySelector('#results').removeChild(document.querySelector('#results').childNodes[i]);
+      // }
+
+    }
+
+    function createDropdownList() {
+
     }
 
   </script>
