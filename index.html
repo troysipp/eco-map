@@ -48,10 +48,10 @@
 
   <div class="container text-center hide this-will-not-be-read" id="results">
     <div class="">
-        <h3 class="text-center display-5 upper-space" id="result-text"></h3>
-        <button class="btn btn-secondary" type="button" id="refreshButton" onclick="restart()">
-          Select new options
-        </button>
+      <h3 class="text-center display-5 upper-space" id="result-text"></h3>
+      <button class="btn btn-secondary" type="button" id="refreshButton" onclick="restart()">
+        Select again
+      </button>
     </div>
   </div>
 
@@ -96,7 +96,6 @@
         ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false);
         ddElemLink.append(ddElemText);
         ddElem.append(ddElemLink);
-        // console.log('countriesList', countriesList)
         placesList.append(ddElem)
       }
     }, './places.json')
@@ -119,8 +118,10 @@
         if (err) {
           console.log(err);
         } else {
-          selectedPlaceCode = code;
-          mapCodeToData(selectedPlaceCode);
+          if (selectedPlaceCode === undefined) {
+            selectedPlaceCode = code;
+            mapCodeToData(selectedPlaceCode);
+          }
         }
       });
     }
@@ -154,7 +155,6 @@
     }
 
     function switchToWorries(place) {
-      // console.log('switching to worries', country, selectedCountryCode);
       if (selectedPlaceCode !== undefined) {
         // change title question
         document.querySelector('#title-question-text').textContent = 'What do you care about?'
@@ -166,9 +166,7 @@
           placesDD = document.querySelector('#places-dd');
           placesDD.className += ' hide this-will-not-be-read';
           document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
-          // console.log(countryData['countries'][selectedCountryCode]['issues']);
           for (i in placeData['places'][selectedPlaceCode]['issues']) {
-            // console.log(issueData['issues'][i]);
             issueDatum = issueData['issues'][i];
             issuesList = document.querySelector('#issues-list');
             ddElem = document.createElement('li');
@@ -177,16 +175,13 @@
             ddElemLink.addEventListener('click', e => setSelectedIssue(e.target.innerHTML), false);
             ddElemLink.append(ddElemText);
             ddElem.append(ddElemLink);
-            // console.log('issuesList', issuesList);
             issuesList.append(ddElem);
           }
         }, './issues.json')
-        // disable clicking on the map
       }
     }
 
     function setSelectedIssue(issueText) {
-      // console.log('EVENT', issueText);
       for (i in issueData['issues']) {
         if (issueText === issueData['issues'][i].issue) {
           selectedIssueCode = i;
@@ -196,25 +191,14 @@
     }
 
     function generateResult() {
-      console.log('before result', document.querySelector('#results').childNodes)
-
-      // console.log('starting result', selectedIssueCode, selectedCountryCode)
       if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
         document.querySelector('#title-row').className += ' hide this-will-not-be-read';
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
-        // resultDiv = document.createElement('div');
-        // resultDiv.id = 'results'
         resultTextContainer = document.querySelector('#result-text');
         resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['value']}`);
         resultText.className = 'text-center align-self-center display-4';
-        // restartLink = document.createElement('button');
-        // restartLinkText = document.createTextNode('Select new options');
-        // restartLink.addEventListener('click', e => restart(e), false);
-        // restartLink.append(restartLinkText);
         titleContainer = document.querySelector('#title-container');
         resultTextContainer.append(resultText);
-        // resultDiv.append(restartLink);
-        // titleContainer.append(resultDiv);
         document.querySelector('#results').className = 'container text-center';
       }
     }
@@ -238,11 +222,8 @@
       // remove adding of issues
       document.querySelector('#issues-list').removeChild(document.querySelector('#issues-list').lastChild)
 
-      console.log('after result', document.querySelector('#results').childNodes)
-
       // remove adding of results
       document.querySelector('#result-text').removeChild(document.querySelector('#result-text').childNodes[0]);
-
     }
 
     function createDropdownList() {
