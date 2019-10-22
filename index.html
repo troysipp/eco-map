@@ -35,13 +35,12 @@
       <div class="dropdown-menu" id="places-list" aria-labelledby="dropdownMenuButton">
       </div>
     </div>
-    <!-- <div class="row"> -->
     <div class="dropdown text-center dropdown-list hide this-will-not-be-read" id="issues-dd">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         Issues
       </button>
-      <div class="dropdown-menu" id="issues-list" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="issues-list">
       </div>
     </div>
   </div>
@@ -78,6 +77,8 @@
     var selectedPlaceCode = undefined;
     var selectedIssueCode = undefined;
 
+    var issuesList = document.querySelector('#issues-list');
+
     var mymap = L.map('mapid').setView([20, -0], 2);
     loadJSON(function (response) {
       worldGrid = JSON.parse(response);
@@ -113,7 +114,6 @@
     }
 
     function onMapClick(e) {
-      // add functionality to disable click here
       grid.getCode(e.latlng.lat, e.latlng.lng, function (err, code) {
         if (err) {
           console.log(err);
@@ -162,13 +162,16 @@
         document.querySelector('#selection-advice').textContent = '(select from the dropdown list)'
         // load issue data
         loadJSON(function (response) {
+          // hide place question
           issueData = JSON.parse(response);
           placesDD = document.querySelector('#places-dd');
           placesDD.className += ' hide this-will-not-be-read';
+
+          // show issue question
           document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
+
           for (i in placeData['places'][selectedPlaceCode]['issues']) {
             issueDatum = issueData['issues'][i];
-            issuesList = document.querySelector('#issues-list');
             ddElem = document.createElement('li');
             ddElemLink = document.createElement('a');
             ddElemText = document.createTextNode(issueDatum.issue);
@@ -192,38 +195,44 @@
 
     function generateResult() {
       if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
+
         document.querySelector('#title-row').className += ' hide this-will-not-be-read';
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
+
         resultTextContainer = document.querySelector('#result-text');
         resultText = document.createTextNode(`${placeData['places'][selectedPlaceCode]['issues'][selectedIssueCode]['value']}`);
         resultText.className = 'text-center align-self-center display-4';
         titleContainer = document.querySelector('#title-container');
         resultTextContainer.append(resultText);
+
         document.querySelector('#results').className = 'container text-center';
       }
     }
 
     function restart() {
+      if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
+        selectedPlaceCode = undefined;
+        selectedIssueCode = undefined;
 
-      selectedPlaceCode = undefined;
-      selectedIssueCode = undefined;
-      // reset title question
-      document.querySelector('#title-question-text').textContent = 'Where do you care about?'
-      // reset selection advice
-      document.querySelector('#selection-advice').textContent = '(select from the map or dropdown list)'
-      // reset selection options
-      document.querySelector('#title-row').className = 'title row';
-      document.querySelector('#questions-container').className = 'container';
-      document.querySelector('#results').className = 'hide this-will-not-be-read';
+        // reset title question
+        document.querySelector('#title-question-text').textContent = 'Where do you care about?'
+        // reset selection advice
+        document.querySelector('#selection-advice').textContent = '(select from the map or dropdown list)'
+        // reset selection options
+        document.querySelector('#title-row').className = 'title row';
+        document.querySelector('#questions-container').className = 'container';
+        document.querySelector('#results').className = 'hide this-will-not-be-read';
+        document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
+        document.querySelector('#places-dd').className = 'dropdown text-center dropdown-list';
 
-      document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list hide this-will-not-be-read';
-      document.querySelector('#places-dd').className = 'dropdown text-center dropdown-list';
+        // remove previous selection's issues
+        while (issuesList.firstChild) {
+          issuesList.removeChild(issuesList.firstChild)
+        }
 
-      // remove adding of issues
-      document.querySelector('#issues-list').removeChild(document.querySelector('#issues-list').lastChild)
-
-      // remove adding of results
-      document.querySelector('#result-text').removeChild(document.querySelector('#result-text').childNodes[0]);
+        // empty result div
+        document.querySelector('#result-text').removeChild(document.querySelector('#result-text').childNodes[0]);
+      }
     }
 
     function createDropdownList() {

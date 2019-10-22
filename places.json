@@ -5,7 +5,19 @@
       "code": "us",
       "issues": {
         "elbow-room": {
-          "value": "In 1995, the United States of America had 28 people/km^2.  In 2018, that number was 36 people/km^2 and is projected to be 35 people/km^2 in 2025."
+          "value": "In 1995, the United States of America had 28 people/km^2.\r\n  In 2018, that number was 36 people/km^2 and is projected to be 35 people/km^2 in 2025.",
+          "confidence": "unknown",
+          "source": ""
+        },
+        "fire": {
+          "value": "Wildfires will occur more frequently in subarctic conifer forests and tundra.",
+          "confidence": "Some confidence",
+          "source": "Section 28.2.3.1; Mack et al. (2011); Mann et al. (2012)"
+        },
+        "tree-line": {
+          "value": "Upward trend in tree lines and associated fauna on high-elevation islands",
+          "confidence": "Low confidence",
+          "source": "Section 29.3.2; Benning et al. (2002); Jump et al. (2006)"
         }
       }
     },
@@ -14,7 +26,14 @@
       "code": "ca",
       "issues": {
         "elbow-room": {
-          "value": "In 1995, Canada had 3 people/km^2.  In 2018, that number was 4 people/km^2 and is projected to be 4 people/km^2 in 2025."
+          "value": "In 1995, Canada had 3 people/km^2.\r\n  In 2018, that number was 4 people/km^2 and is projected to be 4 people/km^2 in 2025.",
+          "confidence": "unknown",
+          "source": ""
+        },
+        "indigenous-people": {
+          "value": "A warming climate, a change in snow cover and in sea ice, and evolving economic and sociopolitics will challenge the livelihoods of Arctic indigeous peoples.",
+          "confidence": "Some confidence",
+          "source": "Sections 18.4.6 and 28.2.4.2; Table 18-4; Hovelsrud et al. (2008); Ford et al. (2009); Beaumier and Ford (2010); Pearce et al. (2010); Eira (2012); Crate (2013); Mathiesen et al. (2013)"
         }
       }
     }

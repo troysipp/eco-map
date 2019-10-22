@@ -1,7 +1,16 @@
 {
   "issues": {
     "elbow-room": {
-      "issue": "'Elbow room,' cried Daniel Boone"
+      "issue": "Elbow room"
+    },
+    "indigenous-people": {
+      "issue": "Indigeous People"
+    },
+    "fire": {
+      "issue": "Things lighting on fire"
+    },
+    "tree-line": {
+      "issue": "Views from mountaintops"
     }
   }
 }
