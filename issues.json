@@ -6,11 +6,23 @@
     "indigenous-people": {
       "issue": "Indigeous People"
     },
-    "fire": {
-      "issue": "Things lighting on fire"
-    },
     "tree-line": {
       "issue": "Views from mountaintops"
+    },
+    "salmon": {
+      "issue": "Eating tasty salmon"
+    },
+    "consistent-coastline": {
+      "issue": "Ocean front property"
+    },
+    "na-glaciers": {
+      "issue": "North American glaciers"
+    },
+    "na-fire": {
+      "issue": "Things not lighting on fire"
+    },
+    "colorful-ocean": {
+      "issue": "The view underwater"
     }
   }
 }
