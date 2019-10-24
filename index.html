@@ -47,7 +47,7 @@
 
   <div class="container text-center hide this-will-not-be-read" id="results">
     <div class="">
-      <h3 class="text-center display-5 upper-space" id="result-text"></h3>
+      <h3 class="text-center display-5" id="result-text"></h3>
       <button class="btn btn-secondary" type="button" id="refreshButton" onclick="restart()">
         Select again
       </button>
@@ -196,7 +196,7 @@
     function generateResult() {
       if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
 
-        document.querySelector('#title-row').className += ' hide this-will-not-be-read';
+        document.querySelector('#title-question-text').textContent = 'Predicted:'
         document.querySelector('#questions-container').className += ' hide this-will-not-be-read';
 
         resultTextContainer = document.querySelector('#result-text');
