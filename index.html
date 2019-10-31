@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div id="mapid" style="height:400px;position:absolute;bottom:0%;left:0%;width: 100%;"></div>
+  <div id="mapid" style="height:400px;position:absolute;bottom:0%;left:0%;width: 100%;cursor: pointer;"></div>
 
   <script type="text/javascript" src="./vendor/leaflet.js"></script>
   <script type="text/javascript" src="./vendor/codegrid-js/src/codegrid.js"></script>
@@ -103,7 +103,7 @@
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
+      maxZoom: 15,
       minZoom: 2,
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoidHJveXNpcHAiLCJhIjoiY2sxOW0zb2FiMDA3NTNkbXEydXRnanV4bCJ9.pr9t9J_hWcOs1DsHoHHO_A'
@@ -180,6 +180,7 @@
           for (i in placeData['places'][selectedPlaceCode]['issues']) {
             issueDatum = issueData['issues'][i];
             ddElem = document.createElement('li');
+            ddElem.classList = 'selectable';
             ddElemLink = document.createElement('a');
             ddElemText = document.createTextNode(issueDatum.issue);
             ddElemLink.addEventListener('click', e => setSelectedIssue(e.target.innerHTML), false);
