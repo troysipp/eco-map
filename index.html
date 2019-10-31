@@ -123,8 +123,10 @@
             if (Object.keys(placeData.places).indexOf(code) > -1) {
               selectedPlaceCode = code;
               mapCodeToData(selectedPlaceCode);
+            } else if (code === "None") {
+              alert('Apologies, we do not have data associated with your choice. Please try another location.')
             } else {
-              alert('Apologies, this data has not yet been populated. Please check back soon or try another location.')
+              alert('Apologies, this data has not been populated. Please check back soon or try another location.')
             }
           }
         }
