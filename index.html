@@ -119,8 +119,13 @@
           console.log(err);
         } else {
           if (selectedPlaceCode === undefined) {
-            selectedPlaceCode = code;
-            mapCodeToData(selectedPlaceCode);
+            // check to see whether the place code has been populated with data yet
+            if (Object.keys(placeData.places).indexOf(code) > -1) {
+              selectedPlaceCode = code;
+              mapCodeToData(selectedPlaceCode);
+            } else {
+              alert('Apologies, this data has not yet been populated. Please check back soon or try another location.')
+            }
           }
         }
       });
