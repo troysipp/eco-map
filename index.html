@@ -112,6 +112,7 @@
           if (selectedPlaceCode === undefined) {
             // check to see whether the place code has been populated with data yet
             if (Object.keys(placeData.places).indexOf(code) > -1) {
+              var newMarker = new L.marker(e.latlng).addTo(mymap);
               selectedPlaceCode = code;
               mapCodeToData(selectedPlaceCode);
             } else if (code === "None") {
