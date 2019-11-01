@@ -88,17 +88,8 @@
     loadJSON(function (response) {
       placeData = JSON.parse(response);
       placesList = document.querySelector('#places-list');
-      for (i in placeData['places']) {
-        place = placeData['places'][i];
-        ddElem = document.createElement('li');
-        ddElem.classList = 'selectable';
-        ddElemLink = document.createElement('a');
-        ddElemText = document.createTextNode(place.name)
-        ddElemLink.addEventListener('click', e => mapFullNameToCode(e.target.innerHTML), false);
-        ddElemLink.append(ddElemText);
-        ddElem.append(ddElemLink);
-        placesList.append(ddElem)
-      }
+      // create a dropdown list of the place data
+      createDropdownList(placeData['places'], placeData['places'], 'name', mapFullNameToCode, placesList);
     }, './places.json')
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -177,17 +168,8 @@
           // show issue question
           document.querySelector('#issues-dd').className = 'dropdown text-center dropdown-list';
 
-          for (i in placeData['places'][selectedPlaceCode]['issues']) {
-            issueDatum = issueData['issues'][i];
-            ddElem = document.createElement('li');
-            ddElem.classList = 'selectable';
-            ddElemLink = document.createElement('a');
-            ddElemText = document.createTextNode(issueDatum.issue);
-            ddElemLink.addEventListener('click', e => setSelectedIssue(e.target.innerHTML), false);
-            ddElemLink.append(ddElemText);
-            ddElem.append(ddElemLink);
-            issuesList.append(ddElem);
-          }
+          // create a dropdown list with the issue data
+          createDropdownList(placeData['places'][selectedPlaceCode]['issues'], issueData['issues'], 'issue', setSelectedIssue, issuesList)
         }, './issues.json')
       }
     }
@@ -243,8 +225,25 @@
       }
     }
 
-    function createDropdownList() {
-
+    function createDropdownList(loopSpot, dataSpot, objKey, clickFcn, destination) {
+      // loop through list items
+      for (i in loopSpot) {
+        // find each corresponding datum
+        datum = dataSpot[i];
+        // create appropriate html
+        ddElem = document.createElement('li');
+        ddElem.classList = 'selectable m-1 btn-small btn-light';
+        ddElem.setAttribute('role', 'button');
+        ddElemLink = document.createElement('a');
+        ddElemText = document.createTextNode(datum[objKey])
+        // add appropriate function on item click
+        ddElemLink.addEventListener('click', e => clickFcn(e.target.innerHTML), false);
+        ddElemLink.classList = 'p-2';
+        ddElemLink.append(ddElemText);
+        ddElem.append(ddElemLink);
+        // put the link in the right place
+        destination.append(ddElem);
+      }
     }
 
   </script>
