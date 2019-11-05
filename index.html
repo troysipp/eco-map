@@ -71,6 +71,8 @@
   <script>
     var worldGrid;
     var grid;
+    var mapMarker;
+
     var placeData;
     var issueData;
 
@@ -99,6 +101,7 @@
       id: 'mapbox.streets',
       accessToken: 'pk.eyJ1IjoidHJveXNpcHAiLCJhIjoiY2sxOW0zb2FiMDA3NTNkbXEydXRnanV4bCJ9.pr9t9J_hWcOs1DsHoHHO_A'
     }).addTo(mymap);
+    L.Icon.Default.prototype.options.shadowUrl = '';
 
     function setGrid() {
       grid = codegrid.CodeGrid('./vendor/codegrid-js/tiles', worldGrid);
@@ -112,7 +115,7 @@
           if (selectedPlaceCode === undefined) {
             // check to see whether the place code has been populated with data yet
             if (Object.keys(placeData.places).indexOf(code) > -1) {
-              var newMarker = new L.marker(e.latlng).addTo(mymap);
+              mapMarker = new L.marker(e.latlng).addTo(mymap);
               selectedPlaceCode = code;
               mapCodeToData(selectedPlaceCode);
             } else if (code === "None") {
@@ -202,6 +205,10 @@
 
     function restart() {
       if (selectedPlaceCode !== undefined && selectedIssueCode !== undefined) {
+        // remove map pin
+        mymap.removeLayer(mapMarker)
+
+        // reset place and issue selections
         selectedPlaceCode = undefined;
         selectedIssueCode = undefined;
 
